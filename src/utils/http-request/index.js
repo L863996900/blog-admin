@@ -1,13 +1,14 @@
 import axios from 'axios'
+import {Message} from "view-design";
 
 
 let token = {
-    Authorization:localStorage.getItem('userToken') || ''
+    Authorization: localStorage.getItem('userToken') || ''
 }
 
 
-export const setToken = (userToken = '') => {
-    token.Authorization = userToken
+export const setToken = (Token = '') => {
+    token.Authorization = Token
 }
 
 export default class baseRequest {
@@ -25,23 +26,39 @@ export default class baseRequest {
 
             },
             e => {
+                // console.log(e)
                 return Promise.reject({
                     msg: e.msg || '网络开小差了，请稍后重试'
                 });
             })
         this.$http.interceptors.response.use(response => {
-                return response
-        },e => {
-            if( e.status === 500 ){
-                this.$message.error(e.msg || '服务器错误，请重试！')
-            } else {
-                this.$message.error(e.msg || '登陆失败！')
+            if (response.data.code !== 200) {
+                return Message.error(response.data.msg || '请求错误！')
             }
+            return response.data
+        }, e => {
+            const err = e.response
+            let msg = err.data.msg || '网络错误'
+            msg.map(item => {
+                Message.error(item)
+            })
+            // console.log(e)
+            // this.$Message.error(e.msg || '服务器错误，请重试！')
         })
     }
-    post(url,params={},config={}){
-        return this.$http.post(url,params,config)
+
+    post(url, params = {}) {
+        return this.$http({
+            url,
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params)
+            // data: params
+        })
     }
+
     postForm(url, params = {}) {
         return this.$http({
             url,
@@ -50,8 +67,10 @@ export default class baseRequest {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             data: JSON.stringify(params)
+            // data: params
         })
     }
+
     postMul(url, params) {
         let formData = new FormData()
         Object.keys(params).forEach(key => {
@@ -66,13 +85,15 @@ export default class baseRequest {
             data: formData
         })
     }
-    get(url,params={},config={}){
-        return this.$http.get(url,{
+
+    get(url, params = {}, config = {}) {
+        return this.$http.get(url, {
             params,
             ...config
         })
     }
-    getForm(url,params={}){
+
+    getForm(url, params = {}) {
         return this.$http({
             params,
             url,
@@ -82,7 +103,8 @@ export default class baseRequest {
             }
         })
     }
-    del(url,params={}){
-        return this.$http.delete(url,params)
+
+    del(url, params = {}) {
+        return this.$http.delete(url, params)
     }
 }

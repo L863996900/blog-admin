@@ -1,17 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import ViewUI from 'view-design';
+import {getUserInfo} from '@/service/user'
 
 import Login from '../views/Login/login.vue'
 import Layout from '../views/Layout.vue'
 
 const Index = () => import('../views/Admin/index.vue')
-const User = () => import('../views/Admin/user.vue')
+const User = () => import('../views/Admin/users.vue')
 const Leave = () => import('../views/Leave/leave.vue')
 const Create = () => import('../views/Article/create.vue')
 const ArticleList = () => import('../views/Article/list.vue')
 const Comments = () => import('../views/Comments/comments.vue')
 const Reply = () => import('../views/Reply/reply.vue')
+
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
 Vue.use(VueRouter)
 
 const routes = [
@@ -39,11 +45,11 @@ const routes = [
 
             //todo: 管理员
             {
-                path: 'admin',
-                name: 'admin',
+                path: 'user',
+                name: 'user',
                 meta: {
-                    module: "/admin",
-                    group: "set",
+                    module: "/user",
+                    group: "user",
                     title: '管理员 - 列表'
                 },
                 component: User,
@@ -100,7 +106,7 @@ const routes = [
             },
             //todo: 回复评论管理
             {
-                path: 'reply/:comment_id',
+                path: 'reply',
                 name: 'reply',
                 meta: {module: "/comments", group: "comments", title: '回复评论 - 列表'},
                 component: Reply,
@@ -122,36 +128,34 @@ const router = new VueRouter({
     }
 })
 
-// router.beforeEach(async (to, from, next) => {
-//     ViewUI.LoadingBar.start();
-//     let token =localStorage.getItem("userToken");
-//     if (token) {
-//         this.$store.dispatch('admin/auth').then(() => {
-//             next()
-//
-//         }).catch(err => {
-//             ViewUI.Message.error(err.data.msg || '权限未授权')
-//             setTimeout(() => {
-//                 next('/login')
-//             }, 1500);
-//         })
-//
-//     } else {
-//         // 判断是否需要登录
-//         if (to.meta.noAuth) {
-//             next()
-//
-//         } else {
-//             ViewUI.Message.error('权限未授权')
-//             setTimeout(() => {
-//                 next('/login')
-//             }, 1500)
-//         }
-//     }
-// });
-//
-// router.afterEach(() => {
-//     ViewUI.LoadingBar.finish();
-//     window.scrollTo(0, 0);
-// });
+router.beforeEach(async (to, from, next) => {
+    Vue.prototype.$Loading.start();
+    let token =localStorage.getItem("userToken");
+    if (token) {
+        getUserInfo().then(() => {
+            next()
+        }).catch(err => {
+            Vue.prototype.$Message.error(err.data.msg || '权限未授权')
+            setTimeout(() => {
+                next('/login')
+            }, 1500);
+        })
+
+    } else {
+        // 判断是否需要登录
+        if (to.meta.noAuth) {
+            next()
+        } else {
+            Vue.prototype.$Message.error('权限未授权')
+            setTimeout(() => {
+                next('/login')
+            }, 1500)
+        }
+    }
+});
+
+router.afterEach(() => {
+    Vue.prototype.$Loading.finish();
+    window.scrollTo(0, 0);
+});
 export default router

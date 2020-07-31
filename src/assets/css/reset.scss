@@ -83,6 +83,11 @@ abbr[title], acronym[title] {
   cursor: help;
 }
 
+.main {
+  padding: 10px 30px;
+}
+
+
 .block {
   display: block;
 }
@@ -94,7 +99,6 @@ abbr[title], acronym[title] {
 .clear {
   clear: both;
 }
-
 
 ::-webkit-scrollbar {
   width: 10px;

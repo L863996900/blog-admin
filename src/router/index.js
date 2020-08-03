@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {getUserInfo} from '@/service/user'
+import store from '@/store/index'
 
 import Login from '../views/Login/login.vue'
 import Layout from '../views/Layout.vue'
 
-const Index = () => import('../views/Admin/index.vue')
-const User = () => import('../views/Admin/users.vue')
+const Index = () => import('../views/User/index.vue')
+const User = () => import('../views/User/users.vue')
 const Leave = () => import('../views/Leave/leave.vue')
 const Create = () => import('../views/Article/create.vue')
 const ArticleList = () => import('../views/Article/list.vue')
@@ -131,25 +131,24 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
     Vue.prototype.$Loading.start();
     let token =localStorage.getItem("userToken");
-    if (token) {
-        getUserInfo().then(() => {
-            next()
-        }).catch(err => {
-            Vue.prototype.$Message.error(err.data.msg || '权限未授权')
-            setTimeout(() => {
-                next('/login')
-            }, 1500);
-        })
-
+    if (to.meta.noAuth) {
+        next()
     } else {
-        // 判断是否需要登录
-        if (to.meta.noAuth) {
-            next()
+        if (token) {
+            store.dispatch('userInfo').then(() => {
+                next()
+            }).catch(err => {
+                Vue.prototype.$Message.error(err.msg || '权限未授权')
+                setTimeout(() => {
+                    next('/login')
+                }, 1500);
+            })
+
         } else {
             Vue.prototype.$Message.error('权限未授权')
             setTimeout(() => {
                 next('/login')
-            }, 1500)
+            }, 1500);
         }
     }
 });

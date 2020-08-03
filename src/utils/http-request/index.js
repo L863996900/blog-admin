@@ -40,7 +40,12 @@ export default class baseRequest {
             const err = e.response
             let msg = err.data.msg || '网络错误'
             msg.map(item => {
-                Message.error(item)
+                Message.error(
+                    {
+                        content: item,
+                        duration: 5
+                    }
+                )
             })
             // console.log(e)
             // this.$Message.error(e.msg || '服务器错误，请重试！')
@@ -103,7 +108,9 @@ export default class baseRequest {
             }
         })
     }
-
+    put(url,params={}){
+        return this.$http.put(url,params)
+    }
     del(url, params = {}) {
         return this.$http.delete(url, params)
     }

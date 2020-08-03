@@ -5,6 +5,9 @@ const api = new HttpRequest()
 export const getUserLogin = params =>
     api.post('user/login', params)
 
+export const addUser = params =>
+    api.post('user/register', params)
+
 export const getUserInfo = () =>
     api.get('user')
 

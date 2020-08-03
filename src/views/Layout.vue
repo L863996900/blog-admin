@@ -1,33 +1,33 @@
 <template lang="pug">
-    div(class="layout" :class="{'layout-hide-text': spanLeft < 5}")
-        div(class="layout-header")
-            div.title
+    .layout(:class="{'layout-hide-text': spanLeft < 5}")
+        .layout-header
+            .title
                 img(class="logo" src="@/assets/img/logo.png" alt="")
                 span 博客后台管理系统
             Button(type="info" @click="logout") 退出
-        Row(type="flex" style="height:100%")
+        Row.contant(type="flex")
             i-col(:span="spanLeft" class="layout-menu-left")
-                div(@click="toggleClick" class="toggle") |||
-                Menu(
-                    active-key="1"
-                    :accordion="true"
-                    width="auto"
-                    :class="menuitemClasses"
-                    @on-select="goLink"
-                    theme="dark"
-                    v-if="menu"
-                )
-                    div(v-for="(item, index) in menu" :key="index")
-                        Menu-item(:name="item.path" v-if="!item.children" style="padding-left: 25px")
-                            Icon(class="layout-icon" :type="item.icon")
-                            span(class="layout-text") {{item.name}}
-                        Submenu(:name="item.path" v-else)
-                            template(slot="title")
+                    div(@click="toggleClick" class="toggle") |||
+                    Menu(
+                        active-key="1"
+                        :accordion="true"
+                        width="auto"
+                        :class="menuitemClasses"
+                        @on-select="goLink"
+                        theme="dark"
+                        v-if="menu"
+                    )
+                        div(v-for="(item, index) in menu" :key="index")
+                            Menu-item(:name="item.path" v-if="!item.children" style="padding-left: 25px")
                                 Icon(class="layout-icon" :type="item.icon")
                                 span(class="layout-text") {{item.name}}
-                            Menu-item(:name="child.path" style="padding-left: 40px" v-for="(child,ind) in item.children" :key="ind")
-                                Icon(:type="child.icon" class="layout-icon")
-                                span(class="layout-text") {{child.name}}
+                            Submenu(:name="item.path" v-else)
+                                template(slot="title")
+                                    Icon(class="layout-icon" :type="item.icon")
+                                    span(class="layout-text") {{item.name}}
+                                Menu-item(:name="child.path" style="padding-left: 40px" v-for="(child,ind) in item.children" :key="ind")
+                                    Icon(:type="child.icon" class="layout-icon")
+                                    span(class="layout-text") {{child.name}}
             i-col(:span="spanRight")
                 keep-alive
                     router-view
@@ -50,13 +50,7 @@
                 ]
             }
         },
-        created() {
-          this.loadData()
-        },
         methods: {
-            loadData() {
-                this.$store.dispatch('userInfo')
-            },
             logout() {
                 window.localStorage.clear()
                 this.$router.push('/login')
@@ -81,10 +75,8 @@
 <style lang="scss" scoped>
     .layout {
         border: 1px solid #d7dde4;
-        background: #f5f7f9;
         position: relative;
         border-radius: 4px;
-        overflow: hidden;
         width: 100%;
     }
 
@@ -112,11 +104,12 @@
         }
 
     }
+    .contant{
+        height: calc(100% - 60px);
+    }
     .layout-content {
         min-height: 500px;
-        margin: 15px;
         overflow: hidden;
-        background: #fff;
         position: relative;
         border-radius: 4px;
     }

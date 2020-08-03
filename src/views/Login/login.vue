@@ -71,7 +71,6 @@
                                     password : this.formInline.password
                                 }
                                 const res = await getUserLogin(params)
-                                console.log(res)
                                 if(res.code !== 200 ) return this.$Message.error( res.msg ||res.data.msg );
                                 setToken(res.data.token)
                                 localStorage.setItem('userToken', res.data.token)
@@ -84,7 +83,6 @@
                             this.$Message.error('请正确填写账号密码!');
                         }
                     })
-                    // console.log(click)
                     setTimeout(()=>{ this.click = false },1000)
                 } else {
                     this.$Message.error('请勿频繁登陆!');
@@ -98,7 +96,6 @@
     html, body {
         width: 100%;
         height: 100%;
-        background: #f0f0f0;
         overflow: hidden;
     }
 

@@ -8,6 +8,7 @@ import Layout from '../views/Layout.vue'
 const Index = () => import('../views/User/index.vue')
 const User = () => import('../views/User/users.vue')
 const Leave = () => import('../views/Leave/leave.vue')
+const Category = () => import('../views/Category/category.vue')
 const Create = () => import('../views/Article/create.vue')
 const ArticleList = () => import('../views/Article/list.vue')
 const Comments = () => import('../views/Comments/comments.vue')
@@ -55,16 +56,16 @@ const routes = [
                 component: User,
             },
             // todo: 分类管理
-            // {
-            //     path: 'category',
-            //     name: 'category',
-            //     meta: {
-            //     module: "/category",
-            //     group: "category",
-            //     title: '分类 - 列表'
-            //     },
-            //     component:  Category,
-            // },
+            {
+                path: 'category',
+                name: 'category',
+                meta: {
+                module: "/category",
+                group: "category",
+                title: '分类 - 列表'
+                },
+                component:  Category,
+            },
             //todo: 留言管理
             {
                 path: 'leave',

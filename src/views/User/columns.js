@@ -1,7 +1,41 @@
 import {updateUserInfo} from '@/service/user'
 import {Message} from "view-design";
 
-export default [
+export const BreadcrumbList = ['首页', '系统管理', '用户管理']
+
+export const filterList = [
+    {
+        label: '账号',
+        key: 'reg_count',
+        type: 'input-label',
+        config: {
+            content: '账号',
+            pend: 'prepend',
+            style: {
+                color: '#999',
+                fontSize: '12px',
+                padding: '0 5px'
+            }
+        },
+        span: 8
+    }, {
+        label: '搜索',
+        key: 'search',
+        type: 'button',
+        icon: 'ios-search',
+        span: 2
+    }, {
+        label: '添加用户',
+        key: 'add',
+        type: 'button',
+        config: {
+            type: 'primary'
+        },
+        span: 2
+    }
+]
+
+export const usersColumns = [
     {
         type: 'index',
         width: 60,

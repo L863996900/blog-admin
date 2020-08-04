@@ -1,4 +1,54 @@
-export default [
+export const BreadcrumbList = ['首页','文章管理','文章列表']
+
+export const filterList = [
+    {
+        label: '文章标题',
+        key: 'title',
+        type: 'input-label',
+        config: {
+            content: '文章标题',
+            pend: 'prepend',
+            style: {
+                color: '#999',
+                fontSize: '12px',
+                padding: '0 5px'
+            }
+        },
+        span: 6
+    },{
+        label: '关键词',
+        key: 'keyword',
+        type: 'input-label',
+        config: {
+            content: '关键词',
+            pend: 'prepend',
+            style: {
+                color: '#999',
+                fontSize: '12px',
+                padding: '0 5px'
+            }
+        },
+        span: 6
+    },{
+        label: '搜索',
+        key: 'search',
+        type: 'button',
+        icon: 'ios-search',
+        span: 2
+    },{
+        label: '添加文章',
+        key: 'jump',
+        type: 'button',
+        path: '/article/create',
+        config: {
+            type: 'primary'
+        },
+        span: 2
+    }
+]
+
+
+export const articleColumns =  [
     {
         type: 'index',
         width: 60,
